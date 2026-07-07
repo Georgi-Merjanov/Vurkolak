@@ -5,6 +5,7 @@ main.exe: main.c role_loader/role_loader.o game_logic/game_logic.o narrator/narr
 
 tests.exe: tests.c role_loader/role_loader.o game_logic/game_logic.o narrator/narrator.o
 	gcc tests.c role_loader/role_loader.o game_logic/game_logic.o narrator/narrator.o -o tests.exe
+	./tests.exe
 
 
 role_loader/role_loader.o: role_loader/role_loader.c role_loader/role_loader.h types.h
