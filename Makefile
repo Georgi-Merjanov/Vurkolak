@@ -3,8 +3,8 @@ all: tests.exe main.exe
 main.exe: main.c role_loader/role_loader.o game_logic/game_logic.o narrator/narrator.o
 	gcc main.c role_loader/role_loader.o game_logic/game_logic.o narrator/narrator.o -o main.exe
 
-tests.exe: tests.c game_logic/game_logic.o
-	gcc tests.c game_logic/game_logic.o -o tests.exe
+tests.exe: tests.c role_loader/role_loader.o game_logic/game_logic.o narrator/narrator.o
+	gcc tests.c role_loader/role_loader.o game_logic/game_logic.o narrator/narrator.o -o tests.exe
 
 
 role_loader/role_loader.o: role_loader/role_loader.c role_loader/role_loader.h types.h

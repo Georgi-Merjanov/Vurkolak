@@ -3,7 +3,7 @@
 
 #define MAX_NAME 50
 #define MAX_ROLE_NAME 20
-#define MAX_DESCRIPTION 500
+#define MAX_DESCRIPTION 600
 
 typedef enum {
     GOOD = 1,  // От добрите (селото)
