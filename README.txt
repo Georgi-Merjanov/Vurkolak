@@ -1,1 +1,1 @@
-A program that is the speaker in the game Wolverine game in C.
+A program that is the speaker in the game Wolverine game in C. [![WakaTime](https://github-readme-stats.vercel.app/api/wakatime?username=georgi_merdjanov10&project=Vurkolak)](https://github.com/anuraghazra/github-readme-stats)
