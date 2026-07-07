@@ -1,2 +1,2 @@
 A program that is the speaker in the game Wolverine game in C.
-![wakatime](https://wakatime.com/badge/user/3faea4a2-8676-4ae7-84da-603009f16e60/project/509448d4-b22c-4ff9-802b-0ad846a51675.svg)
+https://wakatime.com/badge/user/3faea4a2-8676-4ae7-84da-603009f16e60/project/509448d4-b22c-4ff9-802b-0ad846a51675.svg
