@@ -13,16 +13,16 @@ typedef enum {
 } Team;
 
 typedef enum {
-    THIEF = 1,     // Крадец
-    DOUBLE_AGENT,  // Двоен агент
-    LEADER,        // Главатар
-    WOLF,          // Вълк
-    SLEEPLESS,     // Безсънница
-    SEER,          // Гадател
-    DOCTOR,        // Лекар
-    ASSASSIN,      // Убиец
-    MASOCHIST,     // Мазохист
-    VILLAGER       // Селянин
+    KRADEC = 1,   // Крадец
+    DVOEN_AGENT,  // Двоен агент
+    GLAVATAR,     // Главатар
+    VULK,         // Вълк
+    BEZSUNNICA,   // Безсънница
+    GADATEL,      // Гадател
+    LEKAR,        // Лекар
+    UBIEC,        // Убиец
+    MAZOHIST,     // Мазохист
+    SELQNIN       // Селянин
 } Role_type;
 
 typedef struct {
