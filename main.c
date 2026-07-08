@@ -5,6 +5,11 @@
 #include <time.h>
 #include <windows.h>
 
+#include "types.h"
+#include "start_game/start_game.h"
+#include "calculations/calculations.h"
+#include "narrator/narrator.h"
+
 void main()
 {printf("========================================================Vurkolak========================================================\n\n");
 
@@ -14,7 +19,6 @@ do
     scanf("%d", &players_count);
     getchar();}
 while(players_count<6 || players_count>11);
-
 
 
 }

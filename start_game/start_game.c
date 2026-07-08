@@ -5,6 +5,9 @@
 #include "../types.h"
 #define MAX_LINE MAX_ROLE_NAME*2+MAX_DESCRIPTION+7
 
+
+char filename[MAX_FILENAME] = "roles.csv";
+
 int string_to_role_type(char string[])
 {if(strcmp(string,"KRADEC")==0) return KRADEC;
 if(strcmp(string,"DVOEN_AGENT")==0) return DVOEN_AGENT;
