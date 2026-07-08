@@ -1,18 +1,18 @@
 all: tests.exe main.exe
 
-main.exe: main.c role_loader/role_loader.o game_logic/game_logic.o narrator/narrator.o
-	gcc main.c role_loader/role_loader.o game_logic/game_logic.o narrator/narrator.o -o main.exe
+main.exe: main.c start_game/start_game.o calculations/calculations.o narrator/narrator.o
+	gcc main.c start_game/start_game.o calculations/calculations.o narrator/narrator.o -o main.exe
 
-tests.exe: tests.c role_loader/role_loader.o game_logic/game_logic.o narrator/narrator.o
-	gcc tests.c role_loader/role_loader.o game_logic/game_logic.o narrator/narrator.o -o tests.exe
+tests.exe: tests.c start_game/start_game.o calculations/calculations.o narrator/narrator.o
+	gcc tests.c start_game/start_game.o calculations/calculations.o narrator/narrator.o -o tests.exe
 	./tests.exe
 
 
-role_loader/role_loader.o: role_loader/role_loader.c role_loader/role_loader.h types.h
-	gcc -c role_loader/role_loader.c -o role_loader/role_loader.o
+start_game/start_game.o: start_game/start_game.c start_game/start_game.h types.h
+	gcc -c start_game/start_game.c -o start_game/start_game.o
 
-game_logic/game_logic.o: game_logic/game_logic.c game_logic/game_logic.h types.h
-	gcc -c game_logic/game_logic.c -o game_logic/game_logic.o
+calculations/calculations.o: calculations/calculations.c calculations/calculations.h types.h
+	gcc -c calculations/calculations.c -o calculations/calculations.o
 
 narrator/narrator.o: narrator/narrator.c narrator/narrator.h types.h
 	gcc -c narrator/narrator.c -o narrator/narrator.o

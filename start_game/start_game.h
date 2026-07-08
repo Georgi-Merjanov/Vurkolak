@@ -1,5 +1,6 @@
-#ifndef ROLE_LOADER_H
-#define ROLE_LOADER_H
+#ifndef START_GAME_H
+#define START_GAME_H
+
 #include "../types.h"
 
 int string_to_role_type(char string[]);

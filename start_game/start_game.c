@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "role_loader.h"
+#include "start_game.h"
 #include "../types.h"
 #define MAX_LINE MAX_ROLE_NAME*2+MAX_DESCRIPTION+7
 
