@@ -67,3 +67,35 @@ for(i=0; fgets(line,MAX_LINE,file)!=NULL && i<roles_count; i++)
 
 fclose(file);
 return roles;}
+
+
+void shuffle_roles(Role *roles, int total_cards)
+{
+
+}
+
+
+void assign_roles_to_players(Player *players, int players_count, Role *shuffled_roles)
+{
+
+}
+
+
+void choose_kmet(Player *players, int players_count)
+{
+
+}
+
+
+void setup_game(Player *players, int players_count, Role *middle_cards, const char *filename)
+{int i, total_cards = players_count+3;
+Role *loaded_roles = load_roles(filename, total_cards);
+
+shuffle_roles(loaded_roles, total_cards);
+assign_roles_to_players(players, players_count, loaded_roles);
+choose_kmet(players, players_count);
+
+for(i=0; i<3; i++)
+    middle_cards[i] = loaded_roles[players_count+i];
+
+free(loaded_roles);}
