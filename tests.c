@@ -76,5 +76,7 @@ Test_load_roles_fourteenth_card_should_be_villager();}
 
 void main()
 {printf("\n");
+
 Test_role_loader();
+
 printf("Tests: %d/%d passed!\n\n",i,b);}

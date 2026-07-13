@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "start_game.h"
 #include "../types.h"
 #define MAX_LINE MAX_ROLE_NAME*2+MAX_DESCRIPTION+7
@@ -69,33 +70,52 @@ fclose(file);
 return roles;}
 
 
-void shuffle_roles(Role *roles, int total_cards)
-{
+static void shuffle_roles(Role *roles, int total_cards)
+{int i,j;
+Role temp;
 
-}
-
-
-void assign_roles_to_players(Player *players, int players_count, Role *shuffled_roles)
-{
-
-}
-
-
-void choose_kmet(Player *players, int players_count)
-{
-
-}
+for(i=total_cards-1; i>0; i--)
+    {j = rand() % (i+1);
+    temp=roles[i];
+    roles[i]=roles[j];
+    roles[j]=temp;}}
 
 
-void setup_game(Player *players, int players_count, Role *middle_cards, const char *filename)
-{int i, total_cards = players_count+3;
+static void assign_roles_to_players(Player *players, int players_count, Role *shuffled_roles, Role *middle_cards)
+{int i, role_type;
+
+for(i=0; i<players_count; i++)
+    {players[i].role = shuffled_roles[i];
+    
+    role_type = players[i].role.type;
+
+    switch(role_type)
+        {case GLAVATAR: case VULK: players[i].team = BAD; break;
+        case KRADEC: case DVOEN_AGENT: players[i].team = UNKNOWN; break;
+        case MAZOHIST: players[i].team = SOLO; break;
+        default: players[i].team = GOOD; break;}
+    
+    players[i].is_alive = YES;
+
+    if(role_type == DVOEN_AGENT)
+        players[i].is_dvoen_agent = YES;
+    else
+        players[i].is_dvoen_agent = NO;
+    
+    players[i].is_kmet = NO;}
+
+int kmet_index = rand() % players_count;
+players[kmet_index].is_kmet = YES;
+
+for(i=0; i<3; i++)
+    middle_cards[i] = shuffled_roles[players_count+i];}
+
+
+void fill_roles(Player *players, int players_count, Role *middle_cards, const char *filename)
+{int total_cards = players_count+3;
 Role *loaded_roles = load_roles(filename, total_cards);
 
 shuffle_roles(loaded_roles, total_cards);
-assign_roles_to_players(players, players_count, loaded_roles);
-choose_kmet(players, players_count);
-
-for(i=0; i<3; i++)
-    middle_cards[i] = loaded_roles[players_count+i];
+assign_roles_to_players(players, players_count, loaded_roles, middle_cards);
 
 free(loaded_roles);}

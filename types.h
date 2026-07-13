@@ -9,6 +9,11 @@
 extern char filename[MAX_FILENAME];
 
 typedef enum {
+    NO = 0,
+    YES = 1
+} Bool;
+
+typedef enum {
     GOOD = 1,  // От добрите (селото)
     BAD,       // От лошите (главатар и вълци)
     SOLO,      // Мазохист
@@ -39,9 +44,9 @@ typedef struct {
     char name[MAX_NAME];  // Името на играча
     Role role;            // Ролята на играча
     Team team;            // Отборът на играча
-    int is_alive;         // 1 = жив, 0 = мъртъв
-    int is_dvoen_agent;   // 1 = Двоен агент, 0 = не е
-    int is_kmet;          // 1 = Кмет (има решаващ глас), 0 = не е
+    Bool is_alive;         // дали е жив, да или не
+    Bool is_dvoen_agent;   // дали е Двоен агент, да или не
+    Bool is_kmet;          // дали е Кмет, да или не
 } Player;
 
 #endif
