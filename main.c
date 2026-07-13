@@ -3,7 +3,6 @@
 #include <conio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <windows.h>
 
 #include "types.h"
 #include "start_game/start_game.h"
@@ -19,6 +18,8 @@ do
     scanf("%d", &players_count);
     getchar();}
 while(players_count<6 || players_count>11);
+
+srand(time(NULL));
 
 
 }
