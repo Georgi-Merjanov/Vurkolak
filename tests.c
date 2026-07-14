@@ -111,7 +111,7 @@ void Test_suggest_role_logic()
 {int recommended_index;
 Role test_cards[3];
 
-printf("======================================== TEST: SUGGEST ROLE ========================================\n\n");
+printf("\n======================================== TEST: SUGGEST ROLE ========================================\n\n");
 
 test_cards[0].type = SELQNIN;
 test_cards[1].type = GLAVATAR;
@@ -122,23 +122,51 @@ ASSERT_TEST("Recommended index must be between 0 and 2", recommended_index >= 0 
 ASSERT_TEST("Should recommend Glavatar (index 1) over Doctor and Peasant", recommended_index == 1);
 printf("\n");
 
-test_cards[0].type = KRADEC;
+test_cards[0].type = SELQNIN;
 test_cards[1].type = MAZOHIST;
-test_cards[2].type = SELQNIN;
+test_cards[2].type = KRADEC;
 
 recommended_index = suggest_role(test_cards);
-ASSERT_TEST("Recommended index must be between 0 and 2", recommended_index >= 0 && recommended_index <= 2);
-ASSERT_TEST("Double agent should ignore Mazohist and choose Peasant (index 2)", recommended_index == 2);
+ASSERT_TEST("Recommended index must be between 0 and 1", recommended_index >= 0 && recommended_index <= 1);
+ASSERT_TEST("Double agent should ignore Mazohist and choose Peasant (index 0)", recommended_index == 0);
 ASSERT_TEST("Double agent chosen card type must not be MAZOHIST", test_cards[recommended_index].type != MAZOHIST);
 ASSERT_TEST("Double agent chosen card type must not be KRADEC", test_cards[recommended_index].type != KRADEC);
 printf("\n");}
 
 
+void Test_narrate_role_suggestion()
+{Role test_cards[3];
+
+test_cards[0].type = SELQNIN;
+test_cards[1].type = GLAVATAR;
+test_cards[2].type = LEKAR;
+
+strcpy(test_cards[0].name, "Selqnin (Peasant)");
+strcpy(test_cards[1].name, "Glavatar (Leader)");
+strcpy(test_cards[2].name, "Lekar (Doctor)");
+
+narrate_role_suggestion(test_cards);
+
+printf("--------------------------------------------------------------------\n");
+
+test_cards[0].type = SELQNIN;
+test_cards[1].type = MAZOHIST;
+test_cards[2].type = KRADEC;
+
+strcpy(test_cards[0].name, "Selqnin (Peasant)");
+strcpy(test_cards[1].name, "Mazohist (Masochist)");
+strcpy(test_cards[2].name, "Kradec (Thief)");
+
+narrate_role_suggestion(test_cards);
+printf("\n");}
+
+
 void main()
-{printf("\n");
+{system("cls");
 
 Test_role_loader();
 Test_fill_roles_integration();
 Test_suggest_role_logic();
+Test_narrate_role_suggestion();
 
-printf("Tests: %d/%d passed!\n\n", passed_tests, all_tests);}
+printf("\nTests: %d/%d passed!\n\n", passed_tests, all_tests);}

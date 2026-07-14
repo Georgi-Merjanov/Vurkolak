@@ -4,9 +4,11 @@
 #include <conio.h>
 #include <windows.h>
 #include "narrator.h"
+#include "../calculations/calculations.h"
 
 #define MILISECOUNDS 60
 #define MAX_COMMAND 500
+#define MAX_SUGGESTION 50
 
 void speak(const char text[])
 {char command[MAX_COMMAND];
@@ -80,3 +82,21 @@ void start_the_night()
 speak_and_print("Everyone, close your eyes. The night begins!");
 printf("\n\nType a random button when you are ready!\n");
 getch();}
+
+
+void narrate_role_suggestion(Role *middle_cards)
+{int i, suggested_index = suggest_role(middle_cards);
+char suggestion[MAX_SUGGESTION];
+Bool is_double_agent = NO;
+
+for(i=0; i<3; i++)
+    {if(middle_cards[i].type == KRADEC)
+        is_double_agent = YES;}
+
+if(is_double_agent == NO)
+    {sprintf(suggestion, "I suggest you to choose: %s.", middle_cards[suggested_index].name);
+    typewriter_print(suggestion);}
+
+if(is_double_agent == YES)
+    {sprintf(suggestion, "I suggest you to choose: Card %d.", suggested_index + 1);
+    typewriter_print(suggestion);}}
