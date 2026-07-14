@@ -23,7 +23,7 @@ Role *loaded_cards=load_roles(filename, cards_to_load);
 ASSERT_TEST("Loaded cards buffer should not be NULL", loaded_cards!=NULL);
 if(loaded_cards!=NULL)
   {ASSERT_TEST("First role type should be KRADEC", loaded_cards[0].type==KRADEC);
-  ASSERT_TEST("First role text name should be Kradec", strcmp(loaded_cards[0].name,"Kradec")==0);
+  ASSERT_TEST("First role text name should be Kradec", strcmp(loaded_cards[0].name, "Kradec (Thief)")==0);
   ASSERT_TEST("First role team should be UNKNOWN", loaded_cards[0].team==UNKNOWN);
   free(loaded_cards);}
 printf("\n");}
@@ -35,7 +35,7 @@ Role *loaded_cards=load_roles(filename, cards_to_load);
 ASSERT_TEST("Loaded cards buffer should not be NULL", loaded_cards!=NULL);
 if(loaded_cards!=NULL)
   {ASSERT_TEST("Third role type should be BEZSUNNICA", loaded_cards[2].type==BEZSUNNICA);
-  ASSERT_TEST("Third role text name should be Bezsunnica", strcmp(loaded_cards[2].name,"Bezsunnica")==0);
+  ASSERT_TEST("Third role text name should be Bezsunnica", strcmp(loaded_cards[2].name, "Bezsunnica (Sleepless)")==0);
   ASSERT_TEST("Third role team should be GOOD", loaded_cards[2].team==GOOD);
   free(loaded_cards);}
 printf("\n");}
@@ -47,7 +47,7 @@ Role *loaded_cards=load_roles(filename, cards_to_load);
 ASSERT_TEST("Loaded cards buffer should not be NULL", loaded_cards!=NULL);
 if(loaded_cards!=NULL)
   {ASSERT_TEST("Ninth role type should be MAZOHIST", loaded_cards[8].type==MAZOHIST);
-  ASSERT_TEST("Ninth role text name should be Mazohist", strcmp(loaded_cards[8].name,"Mazohist")==0);
+  ASSERT_TEST("Ninth role text name should be Mazohist", strcmp(loaded_cards[8].name, "Mazohist (Masochist)")==0);
   ASSERT_TEST("Ninth role team should be SOLO", loaded_cards[8].team==SOLO);
   free(loaded_cards);}
 printf("\n");}
@@ -59,7 +59,7 @@ Role *loaded_cards=load_roles(filename, cards_to_load);
 ASSERT_TEST("Loaded cards buffer should not be NULL", loaded_cards!=NULL);
 if(loaded_cards!=NULL)
   {ASSERT_TEST("Fourteenth role type should be SELQNIN", loaded_cards[13].type==SELQNIN);
-  ASSERT_TEST("Fourteenth role text name should be Selqnin", strcmp(loaded_cards[13].name,"Selqnin")==0);
+  ASSERT_TEST("Fourteenth role text name should be Selqnin", strcmp(loaded_cards[13].name, "Selqnin (Peasant)")==0);
   ASSERT_TEST("Fourteenth role team should be GOOD", loaded_cards[13].team==GOOD);
   free(loaded_cards);}
 printf("\n");}

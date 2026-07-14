@@ -2,7 +2,7 @@
 #define TYPES_H
 
 #define MAX_NAME 50
-#define MAX_ROLE_NAME 20
+#define MAX_ROLE_NAME 30
 #define MAX_DESCRIPTION 600
 #define MAX_FILENAME 20
 
