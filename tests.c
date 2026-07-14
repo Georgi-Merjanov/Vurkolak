@@ -98,10 +98,10 @@ for(i=0; i<players_count; i++)
     Role_type role_type=players[i].role.type;
 
     switch(role_type)
-        {case GLAVATAR: case VULK: ASSERT_TEST("Bad roles must have BAD team", players[i].team==BAD); break;
-        case MAZOHIST: ASSERT_TEST("Masochist must have SOLO team", players[i].team==SOLO); break;
-        case KRADEC: case DVOEN_AGENT: ASSERT_TEST("Thief/Double Agent must have UNKNOWN team", players[i].team==UNKNOWN); break;
-        default: ASSERT_TEST("Good roles must have GOOD team", players[i].team==GOOD); break;}
+        {case GLAVATAR: case VULK: ASSERT_TEST("Bad roles must have BAD team", players[i].role.team==BAD); break;
+        case MAZOHIST: ASSERT_TEST("Masochist must have SOLO team", players[i].role.team==SOLO); break;
+        case KRADEC: case DVOEN_AGENT: ASSERT_TEST("Thief/Double Agent must have UNKNOWN team", players[i].role.team==UNKNOWN); break;
+        default: ASSERT_TEST("Good roles must have GOOD team", players[i].role.team==GOOD); break;}
      
     printf("\n");
 

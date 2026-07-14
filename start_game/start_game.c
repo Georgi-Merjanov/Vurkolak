@@ -88,12 +88,6 @@ for(i=0; i<players_count; i++)
     {players[i].role = shuffled_roles[i];
     
     role_type = players[i].role.type;
-
-    switch(role_type)
-        {case GLAVATAR: case VULK: players[i].team = BAD; break;
-        case KRADEC: case DVOEN_AGENT: players[i].team = UNKNOWN; break;
-        case MAZOHIST: players[i].team = SOLO; break;
-        default: players[i].team = GOOD; break;}
     
     players[i].is_alive = YES;
 
