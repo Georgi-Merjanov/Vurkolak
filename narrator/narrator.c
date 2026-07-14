@@ -2,12 +2,39 @@
 #include <stdlib.h>
 #include <string.h>
 #include <conio.h>
+#include <windows.h>
 #include "narrator.h"
 
+#define MILISECOUNDS 60
+#define MAX_COMMAND 500
 
-void narrator_show_initial_roles(Player *players, int players_count, int kmet_index)
+void speak(const char text[])
+{char command[MAX_COMMAND];
+sprintf(command, "powershell -Command \"Add-Type -AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('%s')\"", text);
+system(command);}
+
+
+void speak_and_print(const char text[])
+{char command[MAX_COMMAND];
+printf("%s", text);
+sprintf(command, "powershell -Command \"Add-Type -AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('%s')\"", text);
+system(command);}
+
+
+void typewriter_print(const char *text)
+{int i;
+for(i=0; text[i] != '\0'; i++)
+    {printf("%c", text[i]);
+    fflush(stdout);
+    Sleep(MILISECOUNDS);}
+printf("\n");}
+
+
+void show_roles_to_players(Player *players, int players_count, int kmet_index)
 {int i, t=0;
 unsigned char a;
+char message[MAX_ROLE_NAME + 10];
+char description[MAX_DESCRIPTION];
 
 while(1)
     {system("cls");
@@ -32,8 +59,24 @@ while(1)
     if(a==13)
         {system("cls");
         if(t == players_count) break;
-        
-        printf("===================================================================== %s =====================================================================", players[t].name);
-        printf("\n\nYou are %s.\n\n%s", players[t].role.name, players[t].role.description);
-        printf("\n\nType a random button to if you are ready!");
+
+        printf("===================================================================== %s =====================================================================\n\n", players[t].name);
+        sprintf(message, "You are %s.", players[t].role.name);
+        typewriter_print(message);
+        printf("\n");
+        Sleep(1000);
+
+        sprintf(description, "%s", players[t].role.description);
+        typewriter_print(description);
+        printf("\n");
+        Sleep(500);
+
+        typewriter_print("Type a random button to return to the menu when you are ready!");
         a=getch();}}}
+
+
+void start_the_night()
+{system("cls");
+speak_and_print("Everyone, close your eyes. The night begins!");
+printf("\n\nType a random button when you are ready!\n");
+getch();}

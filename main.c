@@ -2,7 +2,8 @@
 
 void main()
 {system("cls");
-printf("======================================================== Vurkolak ========================================================\n\n");
+printf("========================================================= Welcome to the game Vurkolak =========================================================\n\n");
+speak("Welcome to the game Vurkolak!");
 
 int i, players_count;
 char *p;
@@ -31,7 +32,7 @@ for(i=0; i<players_count; i++)
     {printf("Type the name of the %d-th player: ",i+1);
     fgets(players[i].name, MAX_NAME, stdin);
 
-    if(p=strchr(players[i].name,'\n'))
+    if(p=strchr(players[i].name, '\n'))
         *p='\0';
     else
         while(getchar()!='\n');}
@@ -45,6 +46,8 @@ for(i=0; i<players_count; i++)
 srand(time(NULL));
 int kmet_index = fill_roles(players, players_count, middle_cards, filename);
 
-narrator_show_initial_roles(players, players_count, kmet_index);
+show_roles_to_players(players, players_count, kmet_index);
+
+start_the_night();
 
 free(players);}

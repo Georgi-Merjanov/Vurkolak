@@ -44,7 +44,6 @@ typedef struct {
     char name[MAX_NAME];  // Името на играча
     Role role;            // Ролята на играча
     Bool is_alive;         // дали е жив, да или не
-    Bool is_dvoen_agent;   // дали е Двоен агент, да или не
     Bool is_kmet;          // дали е Кмет, да или не
 } Player;
 

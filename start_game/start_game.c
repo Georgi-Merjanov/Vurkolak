@@ -31,7 +31,7 @@ return 0;}
 
 Role* load_roles(const char *filename, int roles_count)
 {int i;
-char line[MAX_LINE], *token;
+char line[MAX_LINE], *token, *p;
 Role *roles=(Role *)malloc(roles_count*sizeof(Role));
 if(roles==NULL)
     {printf("Error allocating memory\n");
@@ -53,7 +53,9 @@ for(i=0; fgets(line, MAX_LINE, file)!=NULL && i<roles_count; i++)
 
     token=strtok(NULL, ";");
     if(token!=NULL)
-        strcpy(roles[i].description, token);
+        {strcpy(roles[i].description, token);
+        while(p=strchr(roles[i].description, '*'))
+            *p='\n';}
 
     token=strtok(NULL, "\n");
     if(token!=NULL)
@@ -83,11 +85,6 @@ for(i=0; i<players_count; i++)
     role_type = players[i].role.type;
     
     players[i].is_alive = YES;
-
-    if(role_type == DVOEN_AGENT)
-        players[i].is_dvoen_agent = YES;
-    else
-        players[i].is_dvoen_agent = NO;
     
     players[i].is_kmet = NO;}
 

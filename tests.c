@@ -95,13 +95,7 @@ for(i=0; i<players_count; i++)
         {case GLAVATAR: case VULK: ASSERT_TEST("Bad roles must have BAD team", players[i].role.team==BAD); break;
         case MAZOHIST: ASSERT_TEST("Masochist must have SOLO team", players[i].role.team==SOLO); break;
         case KRADEC: case DVOEN_AGENT: ASSERT_TEST("Thief/Double Agent must have UNKNOWN team", players[i].role.team==UNKNOWN); break;
-        default: ASSERT_TEST("Good roles must have GOOD team", players[i].role.team==GOOD); break;}
-     
-    printf("\n");
-
-    switch(role_type)
-        {case DVOEN_AGENT: ASSERT_TEST("Dvoen agent flag should be 1", players[i].is_dvoen_agent==1); break;
-        default: ASSERT_TEST("Non-dvoen agent flag should be 0", players[i].is_dvoen_agent==0); break;}}
+        default: ASSERT_TEST("Good roles must have GOOD team", players[i].role.team==GOOD); break;}}
     
 printf("\n");
     
@@ -113,10 +107,38 @@ ASSERT_TEST("Middle card 3 should have a valid type", middle_cards[2].type>=1 &&
 printf("\n");}
 
 
+void Test_suggest_role_logic()
+{int recommended_index;
+Role test_cards[3];
+
+printf("======================================== TEST: SUGGEST ROLE ========================================\n\n");
+
+test_cards[0].type = SELQNIN;
+test_cards[1].type = GLAVATAR;
+test_cards[2].type = LEKAR;
+
+recommended_index = suggest_role(test_cards);
+ASSERT_TEST("Recommended index must be between 0 and 2", recommended_index >= 0 && recommended_index <= 2);
+ASSERT_TEST("Should recommend Glavatar (index 1) over Doctor and Peasant", recommended_index == 1);
+printf("\n");
+
+test_cards[0].type = KRADEC;
+test_cards[1].type = MAZOHIST;
+test_cards[2].type = SELQNIN;
+
+recommended_index = suggest_role(test_cards);
+ASSERT_TEST("Recommended index must be between 0 and 2", recommended_index >= 0 && recommended_index <= 2);
+ASSERT_TEST("Double agent should ignore Mazohist and choose Peasant (index 2)", recommended_index == 2);
+ASSERT_TEST("Double agent chosen card type must not be MAZOHIST", test_cards[recommended_index].type != MAZOHIST);
+ASSERT_TEST("Double agent chosen card type must not be KRADEC", test_cards[recommended_index].type != KRADEC);
+printf("\n");}
+
+
 void main()
 {printf("\n");
 
 Test_role_loader();
 Test_fill_roles_integration();
+Test_suggest_role_logic();
 
 printf("Tests: %d/%d passed!\n\n", passed_tests, all_tests);}
