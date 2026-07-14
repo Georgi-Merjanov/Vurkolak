@@ -1,10 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "start_game/start_game.h"
-#include "calculations/calculations.h"
-#include "start_game/start_game.h"
-#include "types.h"
+#include "everything.h"
 
 #define ASSERT_TEST(MESSAGE, CONDITION) \
   if(CONDITION) \

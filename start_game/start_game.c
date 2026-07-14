@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include "start_game.h"
-#define MAX_LINE MAX_ROLE_NAME*2+MAX_DESCRIPTION+7
 
+#define MAX_LINE (MAX_ROLE_NAME*2+MAX_DESCRIPTION+7)
 
 char filename[MAX_FILENAME] = "roles.csv";
 
-int string_to_role_type(char string[])
+static int string_to_role_type(char string[])
 {if(strcmp(string,"KRADEC")==0) return KRADEC;
 if(strcmp(string,"DVOEN_AGENT")==0) return DVOEN_AGENT;
 if(strcmp(string,"GLAVATAR")==0) return GLAVATAR;
@@ -21,7 +21,7 @@ if(strcmp(string,"SELQNIN")==0) return SELQNIN;
 return 0;}
 
 
-int string_to_team(char string[])
+static int string_to_team(char string[])
 {if(strcmp(string,"GOOD")==0) return GOOD;
 if(strcmp(string,"BAD")==0) return BAD;
 if(strcmp(string,"SOLO")==0) return SOLO;
@@ -42,7 +42,7 @@ if(file==NULL)
     {printf("Error opening the file!\n");
     exit(1);}
 
-for(i=0; fgets(line,MAX_LINE,file)!=NULL && i<roles_count; i++)
+for(i=0; fgets(line, MAX_LINE, file)!=NULL && i<roles_count; i++)
     {token=strtok(line, ";");
     if(token!=NULL)
         roles[i].type=string_to_role_type(token);

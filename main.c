@@ -1,13 +1,4 @@
-#include <stdio.h>
-#include <string.h>
-#include <conio.h>
-#include <stdlib.h>
-#include <time.h>
-
-#include "types.h"
-#include "start_game/start_game.h"
-#include "calculations/calculations.h"
-#include "narrator/narrator.h"
+#include "everything.h"
 
 void main()
 {system("cls");

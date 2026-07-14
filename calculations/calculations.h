@@ -3,6 +3,6 @@
 
 #include "../types.h"
 
-
+int suggest_role(Role *middle_cards);
 
 #endif
