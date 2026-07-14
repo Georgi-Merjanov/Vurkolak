@@ -21,7 +21,7 @@ sprintf(command, "powershell -Command \"Add-Type -AssemblyName System.Speech; (N
 system(command);}
 
 
-void typewriter_print(const char *text)
+void typewriter_print(const char text[])
 {int i;
 for(i=0; text[i] != '\0'; i++)
     {printf("%c", text[i]);
