@@ -10,17 +10,21 @@
 #include "narrator/narrator.h"
 
 void main()
-{printf("========================================================Vurkolak========================================================\n\n");
+{system("cls");
+printf("======================================================== Vurkolak ========================================================\n\n");
 
 int i, players_count;
 char *p;
 
+/*
 do
     {printf("How many are the players (6<=players<=11): ");
     scanf("%d", &players_count);
     getchar();}
 while(players_count<6 || players_count>11);
+*/
 
+players_count = 6;
 
 Player *players = (Player *)malloc(players_count * sizeof(Player));
 if(players == NULL)
@@ -29,6 +33,9 @@ if(players == NULL)
 
 Role middle_cards[3];
 
+printf("\n");
+
+/*
 for(i=0; i<players_count; i++)
     {printf("Type the name of the %d-th player: ",i+1);
     fgets(players[i].name, MAX_NAME, stdin);
@@ -37,10 +44,16 @@ for(i=0; i<players_count; i++)
         *p='\0';
     else
         while(getchar()!='\n');}
+*/
+
+char *players_names[] = {"Gogo", "Emi", "Vasko", "Uli", "Toni", "Lara"};
+
+for(i=0; i<players_count; i++)
+    strcpy(players[i].name, players_names[i]);
 
 srand(time(NULL));
-fill_roles(players, players_count, middle_cards, filename);
+int kmet_index = fill_roles(players, players_count, middle_cards, filename);
 
-
+narrator_show_initial_roles(players, players_count, kmet_index);
 
 free(players);}

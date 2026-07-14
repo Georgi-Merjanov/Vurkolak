@@ -2,13 +2,13 @@ all: tests.exe main.exe
 
 main.exe: main.c start_game/start_game.o calculations/calculations.o narrator/narrator.o
 	gcc main.c start_game/start_game.o calculations/calculations.o narrator/narrator.o -o main.exe
+	./main.exe
 
 tests.exe: tests.c start_game/start_game.o calculations/calculations.o narrator/narrator.o
 	gcc tests.c start_game/start_game.o calculations/calculations.o narrator/narrator.o -o tests.exe
-	./tests.exe
 
 
-start_game/start_game.o: start_game/start_game.c start_game/start_game.h types.h
+start_game/start_game.o: start_game/start_game.c start_game/start_game.h types.h roles.csv
 	gcc -c start_game/start_game.c -o start_game/start_game.o
 
 calculations/calculations.o: calculations/calculations.c calculations/calculations.h types.h

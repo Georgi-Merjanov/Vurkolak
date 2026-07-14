@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "start_game.h"
-#include "../types.h"
 #define MAX_LINE MAX_ROLE_NAME*2+MAX_DESCRIPTION+7
 
 
@@ -45,22 +43,17 @@ if(file==NULL)
     exit(1);}
 
 for(i=0; fgets(line,MAX_LINE,file)!=NULL && i<roles_count; i++)
-    {token=strtok(line, "; ");
+    {token=strtok(line, ";");
     if(token!=NULL)
         roles[i].type=string_to_role_type(token);
 
-    token=strtok(NULL, "; ");
+    token=strtok(NULL, ";");
     if(token!=NULL)
         strcpy(roles[i].name, token);
 
     token=strtok(NULL, ";");
     if(token!=NULL)
         strcpy(roles[i].description, token);
-
-    token=strtok(NULL, ";");
-    if(token!=NULL)
-        {strcat(roles[i].description, "\n\n");
-        strcat(roles[i].description, token);}
 
     token=strtok(NULL, "\n");
     if(token!=NULL)
@@ -81,7 +74,7 @@ for(i=total_cards-1; i>0; i--)
     roles[j]=temp;}}
 
 
-static void assign_roles_to_players(Player *players, int players_count, Role *shuffled_roles, Role *middle_cards)
+static int assign_roles_to_players(Player *players, int players_count, Role *shuffled_roles, Role *middle_cards)
 {int i, role_type;
 
 for(i=0; i<players_count; i++)
@@ -102,14 +95,17 @@ int kmet_index = rand() % players_count;
 players[kmet_index].is_kmet = YES;
 
 for(i=0; i<3; i++)
-    middle_cards[i] = shuffled_roles[players_count+i];}
+    middle_cards[i] = shuffled_roles[players_count+i];
+
+return kmet_index;}
 
 
-void fill_roles(Player *players, int players_count, Role *middle_cards, const char *filename)
+int fill_roles(Player *players, int players_count, Role *middle_cards, const char *filename)
 {int total_cards = players_count+3;
 Role *loaded_roles = load_roles(filename, total_cards);
 
 shuffle_roles(loaded_roles, total_cards);
-assign_roles_to_players(players, players_count, loaded_roles, middle_cards);
+int kmet_index = assign_roles_to_players(players, players_count, loaded_roles, middle_cards);
 
-free(loaded_roles);}
+free(loaded_roles);
+return kmet_index;}
