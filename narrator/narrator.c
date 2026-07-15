@@ -9,6 +9,7 @@
 #define MILISECOUNDS 60
 #define MAX_COMMAND 500
 #define MAX_SUGGESTION 50
+#define MAX_MESSAGE (20 + MAX_NAME + MAX_ROLE_NAME + MAX_DESCRIPTION)
 
 void speak(const char text[])
 {char command[MAX_COMMAND];
@@ -17,10 +18,8 @@ system(command);}
 
 
 void speak_and_print(const char text[])
-{char command[MAX_COMMAND];
-printf("%s", text);
-sprintf(command, "powershell -Command \"Add-Type -AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('%s')\"", text);
-system(command);}
+{printf("%s", text);
+speak(text);}
 
 
 void typewriter_print(const char text[])
@@ -32,71 +31,149 @@ for(i=0; text[i] != '\0'; i++)
 printf("\n");}
 
 
+static void clear_last_lines(int lines)
+{int i;
+for(i=0; i<lines; i++)
+    {printf("\033[A");
+    printf("\033[K");}}
+
+
+int menu(char *texts[], int count, char message[])
+{int i, lines, option = 0;
+unsigned char symbol;
+
+while(1)
+    {for(i=0; i<count; i++)
+        printf("%s%s\n", texts[i], (option == i) ? "<" : "");
+    if(message)
+        {printf("\n%s\n", message);
+        lines = count + 2;}
+
+    symbol = getch();
+    if(symbol == 13) break;
+
+    if(symbol == 224)
+        {symbol = getch();
+        if(symbol == 72 && option > 0) option--;
+        if(symbol == 80 && option < count-1) option++;}
+
+    clear_last_lines(lines);}
+printf("\n");
+return option;}
+
+
 void show_roles_to_players(Player *players, int players_count, int kmet_index)
-{int i, t=0;
-unsigned char a;
-char message[MAX_ROLE_NAME + 10];
+{int i, option = 0;
+unsigned char symbol;
+char message[MAX_ROLE_NAME + 50];
 char description[MAX_DESCRIPTION];
 
 while(1)
     {system("cls");
     printf("============================================== The roles are shuffled! You can see it separately! ==============================================\n\n");
     printf("The Kmet is %s.\nHe has the special right to decide in case of a tied vote.\n\n", players[kmet_index].name);
+    
     for(i=0; i<players_count; i++)
-        {if(t==i)
+        {if(option == i)
             printf("%s<\n", players[i].name);
         else
             printf("%s\n", players[i].name);}
-    if(t == players_count)
+    if(option == players_count)
         printf("Start the game<\n");
     else
         printf("Start the game\n");
 
-    a=getch();
-    if(a==224)
-        {a=getch();
-        if(a==72 && t>0) t--;
-        if(a==80 && t<players_count) t++;}
+    symbol = getch();
+    if(symbol == 224)
+        {symbol = getch();
+        if(symbol == 72 && option > 0) option--;
+        if(symbol == 80 && option < players_count) option++;}
 
-    if(a==13)
+    if(symbol == 13)
         {system("cls");
-        if(t == players_count) break;
+        if(option == players_count) break;
 
-        printf("===================================================================== %s =====================================================================\n\n", players[t].name);
-        sprintf(message, "You are %s.", players[t].role.name);
+        printf("===================================================================== %s =====================================================================\n\n", players[option].name);
+        sprintf(message, "You are %s.", players[option].role.name);
         typewriter_print(message);
         printf("\n");
         Sleep(1000);
 
-        sprintf(description, "%s", players[t].role.description);
+        sprintf(description, "%s", players[option].role.description);
         typewriter_print(description);
         printf("\n");
         Sleep(500);
 
-        typewriter_print("Type a random button to return to the menu when you are ready!");
-        a=getch();}}}
+        typewriter_print("When you are ready, type a random button to return to the menu!");
+        symbol = getch();}}}
 
 
 void start_the_night()
 {system("cls");
 speak_and_print("Everyone, close your eyes. The night begins!");
-printf("\n\nType a random button when you are ready!\n");
+printf("\n\nType a random button when you are already asleep!\n");
 getch();}
 
 
-void narrate_role_suggestion(Role *middle_cards)
+void wake_thief(Player *players, int players_count, Role *middle_cards)
+{int i, theif_index;
+char message[MAX_MESSAGE];
+
+system("cls");
+speak_and_print("Thief, wake up. Open your eyes.");
+printf("\n");
+Sleep(3000);
+speak_and_print("Choose one of the three cards in the middle!");
+
+char *names[] = {middle_cards[0].name, middle_cards[1].name, middle_cards[2].name};
+char *suggestion_text = narrate_role_suggestion(middle_cards);
+int choosen_index = menu(names, 3, suggestion_text);
+
+for(i=0; i<players_count; i++)
+    {if(players[i].role.type == KRADEC)
+        theif_index = i;}
+
+Role temp = players[theif_index].role;
+players[theif_index].role = middle_cards[choosen_index];
+middle_cards[choosen_index] = temp;
+
+printf("\n");
+sprintf(message, "%s, from this moment, you are %s.", players[theif_index].name, players[theif_index].role.name);
+typewriter_print(message);
+
+printf("\n\n");
+typewriter_print(players[theif_index].role.description);
+
+printf("\n\n");
+typewriter_print("When you are ready, type a random button to continue the game!");
+printf("\n");
+getch();
+speak_and_print("Close your eyes and go to sleep.");}
+
+
+void wake_double_agent(Player *players, int players_count, Role *middle_cards)
+{// Трябва да преместя ролята на Крадеца на последно място в middle_cards.
+
+}
+
+
+char * narrate_role_suggestion(Role *middle_cards)
 {int i, suggested_index = suggest_role(middle_cards);
-char suggestion[MAX_SUGGESTION];
 Bool is_double_agent = NO;
+
+char *suggestion=(char *)malloc(MAX_SUGGESTION*sizeof(char));
+if(suggestion==NULL)
+    {printf("Error allocating memory\n");
+    exit(1);}
 
 for(i=0; i<3; i++)
     {if(middle_cards[i].type == KRADEC)
         is_double_agent = YES;}
 
 if(is_double_agent == NO)
-    {sprintf(suggestion, "I suggest you to choose: %s.", middle_cards[suggested_index].name);
-    typewriter_print(suggestion);}
+    sprintf(suggestion, "I suggest you to choose: %s.", middle_cards[suggested_index].name);
 
 if(is_double_agent == YES)
-    {sprintf(suggestion, "I suggest you to choose: Card %d.", suggested_index + 1);
-    typewriter_print(suggestion);}}
+    sprintf(suggestion, "I suggest you to choose: Card %d.", suggested_index + 1);
+
+return suggestion;}

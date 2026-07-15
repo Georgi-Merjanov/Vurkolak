@@ -136,6 +136,7 @@ printf("\n");}
 
 void Test_narrate_role_suggestion()
 {Role test_cards[3];
+char *suggestion;
 
 test_cards[0].type = SELQNIN;
 test_cards[1].type = GLAVATAR;
@@ -145,7 +146,8 @@ strcpy(test_cards[0].name, "Selqnin (Peasant)");
 strcpy(test_cards[1].name, "Glavatar (Leader)");
 strcpy(test_cards[2].name, "Lekar (Doctor)");
 
-narrate_role_suggestion(test_cards);
+suggestion = narrate_role_suggestion(test_cards);
+typewriter_print(suggestion);
 
 printf("--------------------------------------------------------------------\n");
 
@@ -157,8 +159,18 @@ strcpy(test_cards[0].name, "Selqnin (Peasant)");
 strcpy(test_cards[1].name, "Mazohist (Masochist)");
 strcpy(test_cards[2].name, "Kradec (Thief)");
 
-narrate_role_suggestion(test_cards);
+suggestion = narrate_role_suggestion(test_cards);
+typewriter_print(suggestion);
 printf("\n");}
+
+
+void Test_menu()
+{int count = 6;
+char *names[] = {"Gogo", "Emi", "Vasko", "Uli", "Toni", "Lara"};
+int index = menu(names, count, "Choose Gogo!");
+ASSERT_TEST("Choosen index should be between 0 and 5.", index >= 0 && index <= 5)
+printf("Choosen index: %d\n", index);
+printf("Choosen name: %s\n\n", names[index]);}
 
 
 void main()
@@ -167,6 +179,7 @@ void main()
 Test_role_loader();
 Test_fill_roles_integration();
 Test_suggest_role_logic();
-Test_narrate_role_suggestion();
+// Test_narrate_role_suggestion();
+ Test_menu();
 
 printf("\nTests: %d/%d passed!\n\n", passed_tests, all_tests);}

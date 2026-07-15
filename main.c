@@ -10,7 +10,7 @@ char *p;
 
 /*
 do
-    {printf("How many are the players (6<=players<=11): ");
+    {typewriter_print("How many are the players (6<=players<=11): ");
     scanf("%d", &players_count);
     getchar();}
 while(players_count<6 || players_count>11);
@@ -29,7 +29,7 @@ printf("\n");
 
 /*
 for(i=0; i<players_count; i++)
-    {printf("Type the name of the %d-th player: ",i+1);
+    {typewriter_print("Type the name of the %d-th player: ",i+1);
     fgets(players[i].name, MAX_NAME, stdin);
 
     if(p=strchr(players[i].name, '\n'))
@@ -49,5 +49,6 @@ int kmet_index = fill_roles(players, players_count, middle_cards, filename);
 show_roles_to_players(players, players_count, kmet_index);
 
 start_the_night();
+wake_thief(players, players_count, middle_cards);
 
 free(players);}

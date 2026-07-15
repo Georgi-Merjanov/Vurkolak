@@ -15,15 +15,3 @@ for(i=0; i<10; i++)
     {for(j=0; j<3; j++)
         {if(priority_list[i] == middle_cards[j].type && (!is_double_agent || middle_cards[j].type != MAZOHIST))
             return j;}}}
-
-
-void wake_thief(Player *thief, Role *middle_cards)
-{
-
-}
-
-
-void wake_double_agent(Player *thief, Role *middle_cards)
-{
-
-}
