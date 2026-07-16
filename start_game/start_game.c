@@ -89,7 +89,7 @@ for(i=0; i<players_count; i++)
     role_type = players[i].role.type;
     
     players[i].is_alive = YES;
-    
+    players[i].is_double_agent = NO;
     players[i].is_kmet = NO;}
 
 int kmet_index = rand() % players_count;

@@ -50,5 +50,6 @@ show_roles_to_players(players, players_count, kmet_index);
 
 start_the_night();
 wake_thief(players, players_count, middle_cards);
+wake_double_agent(players, players_count, middle_cards);
 
 free(players);}
