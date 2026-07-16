@@ -5,6 +5,7 @@
 #include <windows.h>
 #include "narrator.h"
 #include "../calculations/calculations.h"
+#include "../start_game/start_game.h"
 
 #define MILISECOUNDS 60
 #define MAX_COMMAND 500
@@ -118,41 +119,58 @@ getch();}
 void wake_thief(Player *players, int players_count, Role *middle_cards)
 {int i, theif_index;
 char message[MAX_MESSAGE];
+Bool there_is_theif = YES;
 
 system("cls");
+printf("======================================================================== KRADEC (THIEF) ================================================================\n\n");
 speak_and_print("Thief, wake up. Open your eyes.");
-printf("\n");
+printf("\n\n");
 Sleep(3000);
-speak_and_print("Choose one of the three cards in the middle!");
+speak_and_print("Choose one of the three cards in the middle:");
+printf("\n\n");
 
-char *names[] = {middle_cards[0].name, middle_cards[1].name, middle_cards[2].name};
-char *suggestion_text = narrate_role_suggestion(middle_cards);
-int choosen_index = menu(names, 3, suggestion_text);
+for(i=0; i<3; i++)
+    {if(middle_cards[i].type == KRADEC)
+        there_is_theif = NO;}
 
-for(i=0; i<players_count; i++)
-    {if(players[i].role.type == KRADEC)
-        theif_index = i;}
+if(there_is_theif)
+    {char *names[] = {middle_cards[0].name, middle_cards[1].name, middle_cards[2].name};
+    char *suggestion_text = narrate_role_suggestion(middle_cards);
+    int choosen_index = menu(names, 3, suggestion_text);
 
-Role temp = players[theif_index].role;
-players[theif_index].role = middle_cards[choosen_index];
-middle_cards[choosen_index] = temp;
+    for(i=0; i<players_count; i++)
+        {if(players[i].role.type == KRADEC)
+            theif_index = i;}
+
+    change_roles(&players[theif_index].role, &middle_cards[choosen_index]);
+
+    printf("--------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+    sprintf(message, "%s, from this moment, you are %s.", players[theif_index].name, players[theif_index].role.name);
+    typewriter_print(message);
+
+    printf("\n");
+    typewriter_print(players[theif_index].role.description);
+
+    printf("\n");
+    typewriter_print("When you are ready, type a random button to continue the game!");
+    getch();}
+
+else
+    {printf("The is no Thief!\n");
+    Sleep(30000);}
 
 printf("\n");
-sprintf(message, "%s, from this moment, you are %s.", players[theif_index].name, players[theif_index].role.name);
-typewriter_print(message);
-
-printf("\n\n");
-typewriter_print(players[theif_index].role.description);
-
-printf("\n\n");
-typewriter_print("When you are ready, type a random button to continue the game!");
-printf("\n");
-getch();
 speak_and_print("Close your eyes and go to sleep.");}
 
 
 void wake_double_agent(Player *players, int players_count, Role *middle_cards)
-{// Трябва да преместя ролята на Крадеца на последно място в middle_cards.
+{int i;
+
+for(i=0; i<3; i++)
+    {if(middle_cards[i].type == KRADEC)
+        {change_roles(&middle_cards[i], &middle_cards[2]);
+        break;}}
+
 
 }
 

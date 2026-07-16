@@ -3,6 +3,7 @@
 
 #include "../types.h"
 
+void change_roles(Role *a, Role *b);
 static int string_to_role_type(char string[]);
 static int string_to_team(char string[]);
 Role* load_roles(const char *filename, int cards_to_load);

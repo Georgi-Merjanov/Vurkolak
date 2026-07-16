@@ -173,6 +173,80 @@ printf("Choosen index: %d\n", index);
 printf("Choosen name: %s\n\n", names[index]);}
 
 
+void Test_wake_thief_logic_when_thief_is_present()
+{int i, players_count = 6, theif_index = -1;
+Player players[6];
+Role middle_cards[3];
+
+for(i=0; i<players_count; i++)
+    {sprintf(players[i].name, "Player_%d", i+1);
+    players[i].role.type = SELQNIN;
+    strcpy(players[i].role.name, "Selqnin (Peasant)");}
+
+players[2].role.type = KRADEC;
+strcpy(players[2].role.name, "Kradec (Thief)");
+
+middle_cards[0].type = GLAVATAR; strcpy(middle_cards[0].name, "Glavatar (Leader)");
+middle_cards[1].type = LEKAR;    strcpy(middle_cards[1].name, "Lekar (Doctor)");
+middle_cards[2].type = VULK;     strcpy(middle_cards[2].name, "Vulk (Wolf)");
+
+Bool there_is_theif = YES;
+for(i=0; i<3; i++)
+    {if(middle_cards[i].type == KRADEC)
+        there_is_theif = NO;}
+
+ASSERT_TEST("Thief should be flagged as present when not in the middle", there_is_theif == YES);
+
+int choosen_index = 1; 
+
+if(there_is_theif)
+    {for(i=0; i<players_count; i++)
+        {if(players[i].role.type == KRADEC)
+            theif_index = i;}
+
+    Role temp = players[theif_index].role;
+    players[theif_index].role = middle_cards[choosen_index];
+    middle_cards[choosen_index] = temp;}
+
+ASSERT_TEST("Thief index should be found correctly (index 2)", theif_index == 2);
+ASSERT_TEST("The former Thief player should now be LEKAR", players[2].role.type == LEKAR);
+ASSERT_TEST("The middle card at chosen index should now be KRADEC", middle_cards[1].type == KRADEC);
+printf("\n");}
+
+
+void Test_wake_thief_logic_when_thief_is_in_middle()
+{int i, players_count = 6;
+Player players[6];
+Role middle_cards[3];
+
+for(i=0; i<players_count; i++)
+    {sprintf(players[i].name, "Player_%d", i+1);
+    players[i].role.type = SELQNIN;
+    strcpy(players[i].role.name, "Selqnin (Peasant)");}
+
+middle_cards[0].type = GLAVATAR; strcpy(middle_cards[0].name, "Glavatar (Leader)");
+middle_cards[1].type = KRADEC;    strcpy(middle_cards[1].name, "Kradec (Thief)");
+middle_cards[2].type = VULK;     strcpy(middle_cards[2].name, "Vulk (Wolf)");
+
+Bool there_is_theif = YES;
+for(i=0; i<3; i++)
+    {if(middle_cards[i].type == KRADEC)
+        there_is_theif = NO;}
+
+ASSERT_TEST("Thief should be flagged as ABSENT when in the middle", there_is_theif == NO);
+printf("\n");
+
+for(i=0; i<players_count; i++)
+    {ASSERT_TEST("Player role should remain Peasant", players[i].role.type == SELQNIN);}
+printf("\n");}
+
+
+void Test_wake_thief()
+{printf("======================================== TEST: WAKE THIEF LOGIC ========================================\n\n");
+Test_wake_thief_logic_when_thief_is_present();
+Test_wake_thief_logic_when_thief_is_in_middle();}
+
+
 void main()
 {system("cls");
 
@@ -180,6 +254,7 @@ Test_role_loader();
 Test_fill_roles_integration();
 Test_suggest_role_logic();
 // Test_narrate_role_suggestion();
- Test_menu();
+// Test_menu();
+Test_wake_thief();
 
 printf("\nTests: %d/%d passed!\n\n", passed_tests, all_tests);}

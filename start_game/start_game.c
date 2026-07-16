@@ -7,6 +7,12 @@
 
 char filename[MAX_FILENAME] = "roles.csv";
 
+void change_roles(Role *a, Role *b)
+{Role temp = *a;
+*a = *b;
+*b = temp;}
+
+
 static int string_to_role_type(char string[])
 {if(strcmp(string,"KRADEC")==0) return KRADEC;
 if(strcmp(string,"DVOEN_AGENT")==0) return DVOEN_AGENT;
@@ -67,17 +73,15 @@ return roles;}
 
 static void shuffle_roles(Role *roles, int total_cards)
 {int i,j;
-Role temp;
 
 for(i=total_cards-1; i>0; i--)
     {j = rand() % (i+1);
-    temp=roles[i];
-    roles[i]=roles[j];
-    roles[j]=temp;}}
+    change_roles(&roles[i], &roles[j]);}}
 
 
 static int assign_roles_to_players(Player *players, int players_count, Role *shuffled_roles, Role *middle_cards)
-{int i, role_type;
+{int i, role_type, theif_index;
+Bool there_is_theif = YES;
 
 for(i=0; i<players_count; i++)
     {players[i].role = shuffled_roles[i];
@@ -93,6 +97,18 @@ players[kmet_index].is_kmet = YES;
 
 for(i=0; i<3; i++)
     middle_cards[i] = shuffled_roles[players_count+i];
+
+for(i=0; i<3; i++)
+    {if(middle_cards[i].type == KRADEC)
+        {there_is_theif = NO;
+        theif_index = i;
+        break;}}
+
+if(there_is_theif == NO)
+        {Bool should_swap = rand() % 2; // Намалява се с 50% шансът Крадецът да е в една от картите по средата.
+        if(should_swap)
+            {int random_player_index = rand() % players_count;
+            change_roles(&players[random_player_index].role, &middle_cards[theif_index]);}}
 
 return kmet_index;}
 
