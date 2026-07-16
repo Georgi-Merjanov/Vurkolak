@@ -8,6 +8,7 @@
 #include "../start_game/start_game.h"
 
 #define MILISECOUNDS 60
+#define TIMES_DOTS 5
 #define MAX_COMMAND 500
 #define MAX_SUGGESTION 50
 #define MAX_MESSAGE (20 + MAX_NAME + MAX_ROLE_NAME + MAX_DESCRIPTION)
@@ -30,6 +31,20 @@ for(i=0; text[i] != '\0'; i++)
     fflush(stdout);
     Sleep(MILISECOUNDS);}
 printf("\n");}
+
+
+void three_dots()
+{int i;
+
+for(i=0; i<TIMES_DOTS; i++)
+    {printf("."); fflush(stdout); Sleep(200);
+    printf("."); fflush(stdout); Sleep(200);
+    printf("."); fflush(stdout); Sleep(200);
+
+    Sleep(200);
+    printf("\b \b\b \b\b \b");
+    fflush(stdout);
+    Sleep(200);}}
 
 
 static void clear_last_lines(int lines)

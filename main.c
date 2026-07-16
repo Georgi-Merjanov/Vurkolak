@@ -46,6 +46,9 @@ for(i=0; i<players_count; i++)
 srand(time(NULL));
 int kmet_index = fill_roles(players, players_count, middle_cards, filename);
 
+printf("\nShuffling roles ");
+three_dots();
+
 show_roles_to_players(players, players_count, kmet_index);
 
 start_the_night();
