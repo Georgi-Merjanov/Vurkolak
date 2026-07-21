@@ -131,11 +131,34 @@ printf("\n\nType a random button when you are already asleep!\n");
 getch();}
 
 
-void wake_thief(Player *players, int players_count, Role *middle_cards)
-{int i, theif_index;
-char message[MAX_MESSAGE];
-Bool there_is_theif = YES;
+char * narrate_role_suggestion(Role *middle_cards)
+{int i, suggested_index = suggest_role(middle_cards);
+Bool is_double_agent = NO;
 
+char *suggestion=(char *)malloc(MAX_SUGGESTION*sizeof(char));
+if(suggestion==NULL)
+    {printf("Error allocating memory\n");
+    exit(1);}
+
+for(i=0; i<3; i++)
+    {if(middle_cards[i].type == KRADEC)
+        is_double_agent = YES;}
+
+if(is_double_agent == NO)
+    sprintf(suggestion, "I suggest you to choose: %s.", middle_cards[suggested_index].name);
+
+if(is_double_agent == YES)
+    sprintf(suggestion, "I suggest you to choose: Card %d.", suggested_index + 1);
+
+return suggestion;}
+
+
+void wake_thief(Player *players, int players_count, Role *middle_cards)
+{int i, thief_index;
+char message[MAX_MESSAGE];
+Bool there_is_thief = YES;
+
+Sleep(1000);
 system("cls");
 printf("======================================================================== KRADEC (THIEF) ================================================================\n\n");
 speak_and_print("Thief, wake up. Open your eyes.");
@@ -144,27 +167,21 @@ Sleep(3000);
 speak_and_print("Choose one of the three cards in the middle:");
 printf("\n\n");
 
-for(i=0; i<3; i++)
-    {if(middle_cards[i].type == KRADEC)
-        there_is_theif = NO;}
+there_is_thief = is_role_not_in_the_middle(middle_cards, KRADEC);
 
-if(there_is_theif)
+if(there_is_thief)
     {char *names[] = {middle_cards[0].name, middle_cards[1].name, middle_cards[2].name};
     char *suggestion_text = narrate_role_suggestion(middle_cards);
     int choosen_index = menu(names, 3, suggestion_text);
 
-    for(i=0; i<players_count; i++)
-        {if(players[i].role.type == KRADEC)
-            theif_index = i;}
-
-    change_roles(&players[theif_index].role, &middle_cards[choosen_index]);
+    thief_index = execute_role_swap(players, players_count, middle_cards, KRADEC, choosen_index);
 
     printf("--------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-    sprintf(message, "%s, from this moment, you are %s.", players[theif_index].name, players[theif_index].role.name);
+    sprintf(message, "%s, from this moment, you are %s.", players[thief_index].name, players[thief_index].role.name);
     typewriter_print(message);
 
     printf("\n");
-    typewriter_print(players[theif_index].role.description);
+    typewriter_print(players[thief_index].role.description);
 
     printf("\n");
     typewriter_print("When you are ready, type a random button to continue the game!");
@@ -183,11 +200,9 @@ void wake_double_agent(Player *players, int players_count, Role *middle_cards)
 char message[MAX_MESSAGE];
 Bool there_is_double_agent = YES;
 
-for(i=0; i<3; i++)
-    {if(middle_cards[i].type == KRADEC)
-        {change_roles(&middle_cards[i], &middle_cards[2]);
-        break;}}
+move_thief_to_end(middle_cards);
 
+Sleep(1000);
 system("cls");
 printf("================================================================== DVOEN AGENT (DOUBLE AGENT) ==========================================================\n\n");
 speak_and_print("Double agent, wake up. Open your eyes.");
@@ -196,21 +211,14 @@ Sleep(3000);
 speak_and_print("Choose one of the two cards in the middle:");
 printf("\n\n");
 
-for(i=0; i<2; i++)
-    {if(middle_cards[i].type == DVOEN_AGENT)
-        there_is_double_agent = NO;}
+there_is_double_agent = is_role_not_in_the_middle(middle_cards, DVOEN_AGENT);
 
 if(there_is_double_agent)
     {char *names[] = {"Card 1", "Card 2"};
     char *suggestion_text = narrate_role_suggestion(middle_cards);
     int choosen_index = menu(names, 2, suggestion_text);
 
-    for(i=0; i<players_count; i++)
-        {if(players[i].role.type == DVOEN_AGENT)
-            double_agent_index = i;}
-
-    change_roles(&players[double_agent_index].role, &middle_cards[choosen_index]);
-    players[double_agent_index].is_double_agent = YES;
+    double_agent_index = execute_role_swap(players, players_count, middle_cards, DVOEN_AGENT, choosen_index);
 
     printf("--------------------------------------------------------------------------------------------------------------------------------------------------------\n");
     sprintf(message, "%s, from this moment, you are %s.", players[double_agent_index].name, players[double_agent_index].role.name);
@@ -232,25 +240,3 @@ else
 
 printf("\n");
 speak_and_print("Close your eyes and go to sleep.");}
-
-
-char * narrate_role_suggestion(Role *middle_cards)
-{int i, suggested_index = suggest_role(middle_cards);
-Bool is_double_agent = NO;
-
-char *suggestion=(char *)malloc(MAX_SUGGESTION*sizeof(char));
-if(suggestion==NULL)
-    {printf("Error allocating memory\n");
-    exit(1);}
-
-for(i=0; i<3; i++)
-    {if(middle_cards[i].type == KRADEC)
-        is_double_agent = YES;}
-
-if(is_double_agent == NO)
-    sprintf(suggestion, "I suggest you to choose: %s.", middle_cards[suggested_index].name);
-
-if(is_double_agent == YES)
-    sprintf(suggestion, "I suggest you to choose: Card %d.", suggested_index + 1);
-
-return suggestion;}
