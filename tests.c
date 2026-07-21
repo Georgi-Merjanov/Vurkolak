@@ -208,7 +208,7 @@ ASSERT_TEST("is_role_not_in_the_middle for KRADEC when present at index 2", is_r
 printf("\n");}
 
 
-void Test_execute_role_swap()
+void Test_change_with_chosen_middle_card()
 {printf("\n======================================== TEST: EXECUTE ROLE SWAP ========================================\n\n");
 int i, swapped_index, players_count = 6;
 Player players[6];
@@ -226,13 +226,13 @@ middle_cards[0].type = GLAVATAR; strcpy(middle_cards[0].name, "Glavatar (Leader)
 middle_cards[1].type = LEKAR;    strcpy(middle_cards[1].name, "Lekar (Doctor)");
 middle_cards[2].type = VULK;     strcpy(middle_cards[2].name, "Vulk (Wolf)");
 
-swapped_index = execute_role_swap(players, players_count, middle_cards, KRADEC, 1);
-ASSERT_TEST("execute_role_swap returns correct player index for KRADEC", swapped_index == 2);
+swapped_index = change_with_chosen_middle_card(players, players_count, middle_cards, KRADEC, 1);
+ASSERT_TEST("change_with_chosen_middle_card returns correct player index for KRADEC", swapped_index == 2);
 ASSERT_TEST("Former KRADEC player gets new role", players[2].role.type == LEKAR);
 ASSERT_TEST("Middle card gets KRADEC role", middle_cards[1].type == KRADEC);
 
-swapped_index = execute_role_swap(players, players_count, middle_cards, DVOEN_AGENT, 0);
-ASSERT_TEST("execute_role_swap returns correct player index for DVOEN_AGENT", swapped_index == 4);
+swapped_index = change_with_chosen_middle_card(players, players_count, middle_cards, DVOEN_AGENT, 0);
+ASSERT_TEST("change_with_chosen_middle_card returns correct player index for DVOEN_AGENT", swapped_index == 4);
 ASSERT_TEST("Former DVOEN_AGENT player gets new role", players[4].role.type == GLAVATAR);
 ASSERT_TEST("Former DVOEN_AGENT player sets is_double_agent flag", players[4].is_double_agent == YES);
 ASSERT_TEST("Middle card gets DVOEN_AGENT role", middle_cards[0].type == DVOEN_AGENT);
@@ -313,7 +313,7 @@ Test_suggest_role_logic();
 // Test_menu();
 Test_is_role_not_in_the_middle();
 Test_move_thief_to_end();
-Test_execute_role_swap();
+Test_change_with_chosen_middle_card();
 Test_wake_thief();
 Test_wake_double_agent();
 

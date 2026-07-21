@@ -174,7 +174,7 @@ if(there_is_thief)
     char *suggestion_text = narrate_role_suggestion(middle_cards);
     int choosen_index = menu(names, 3, suggestion_text);
 
-    thief_index = execute_role_swap(players, players_count, middle_cards, KRADEC, choosen_index);
+    thief_index = change_with_chosen_middle_card(players, players_count, middle_cards, KRADEC, choosen_index);
 
     printf("--------------------------------------------------------------------------------------------------------------------------------------------------------\n");
     sprintf(message, "%s, from this moment, you are %s.", players[thief_index].name, players[thief_index].role.name);
@@ -218,7 +218,7 @@ if(there_is_double_agent)
     char *suggestion_text = narrate_role_suggestion(middle_cards);
     int choosen_index = menu(names, 2, suggestion_text);
 
-    double_agent_index = execute_role_swap(players, players_count, middle_cards, DVOEN_AGENT, choosen_index);
+    double_agent_index = change_with_chosen_middle_card(players, players_count, middle_cards, DVOEN_AGENT, choosen_index);
 
     printf("--------------------------------------------------------------------------------------------------------------------------------------------------------\n");
     sprintf(message, "%s, from this moment, you are %s.", players[double_agent_index].name, players[double_agent_index].role.name);

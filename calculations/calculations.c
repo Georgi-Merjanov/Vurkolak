@@ -20,7 +20,7 @@ for(i=0; i<cards_to_check; i++)
 return YES;}
 
 
-int execute_role_swap(Player *players, int players_count, Role *middle_cards, Role_type role_type, int choosen_index)
+int change_with_chosen_middle_card(Player *players, int players_count, Role *middle_cards, Role_type role_type, int choosen_index)
 {int i, player_index = -1;
 
 for(i=0; i<players_count; i++)
