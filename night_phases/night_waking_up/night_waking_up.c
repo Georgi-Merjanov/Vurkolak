@@ -3,126 +3,13 @@
 #include <string.h>
 #include <conio.h>
 #include <windows.h>
-#include "narrator.h"
-#include "../calculations/calculations.h"
-#include "../start_game/start_game.h"
 
-#define MILISECOUNDS 60
-#define TIMES_DOTS 5
-#define MAX_COMMAND 500
+#include "night_waking_up.h"
+#include "../../narrator_tools/narrator_tools.h"
+#include "../night_calculations/night_calculations.h"
+
 #define MAX_SUGGESTION 50
 #define MAX_MESSAGE (20 + MAX_NAME + MAX_ROLE_NAME + MAX_DESCRIPTION)
-
-void speak(const char text[])
-{char command[MAX_COMMAND];
-sprintf(command, "powershell -Command \"Add-Type -AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('%s')\"", text);
-system(command);}
-
-
-void speak_and_print(const char text[])
-{printf("%s", text);
-speak(text);}
-
-
-void typewriter_print(const char text[])
-{int i;
-for(i=0; text[i] != '\0'; i++)
-    {printf("%c", text[i]);
-    fflush(stdout);
-    Sleep(MILISECOUNDS);}
-printf("\n");}
-
-
-void three_dots()
-{int i;
-
-for(i=0; i<TIMES_DOTS; i++)
-    {printf("."); fflush(stdout); Sleep(200);
-    printf("."); fflush(stdout); Sleep(200);
-    printf("."); fflush(stdout); Sleep(200);
-
-    Sleep(200);
-    printf("\b \b\b \b\b \b");
-    fflush(stdout);
-    Sleep(200);}}
-
-
-static void clear_last_lines(int lines)
-{int i;
-for(i=0; i<lines; i++)
-    {printf("\033[A");
-    printf("\033[K");}}
-
-
-int menu(char *texts[], int count, char message[])
-{int i, lines, option = 0;
-unsigned char symbol;
-
-while(1)
-    {for(i=0; i<count; i++)
-        printf("%s%s\n", texts[i], (option == i) ? "<" : "");
-    if(message)
-        {printf("\n%s\n", message);
-        lines = count + 2;}
-
-    symbol = getch();
-    if(symbol == 13) break;
-
-    if(symbol == 224)
-        {symbol = getch();
-        if(symbol == 72 && option > 0) option--;
-        if(symbol == 80 && option < count-1) option++;}
-
-    clear_last_lines(lines);}
-printf("\n");
-return option;}
-
-
-void show_roles_to_players(Player *players, int players_count, int kmet_index)
-{int i, option = 0;
-unsigned char symbol;
-char message[MAX_ROLE_NAME + 50];
-char description[MAX_DESCRIPTION];
-
-while(1)
-    {system("cls");
-    printf("============================================== The roles are shuffled! You can see it separately! ==============================================\n\n");
-    printf("The Kmet is %s.\nHe has the special right to decide in case of a tied vote.\n\n", players[kmet_index].name);
-    
-    for(i=0; i<players_count; i++)
-        {if(option == i)
-            printf("%s<\n", players[i].name);
-        else
-            printf("%s\n", players[i].name);}
-    if(option == players_count)
-        printf("Start the game<\n");
-    else
-        printf("Start the game\n");
-
-    symbol = getch();
-    if(symbol == 224)
-        {symbol = getch();
-        if(symbol == 72 && option > 0) option--;
-        if(symbol == 80 && option < players_count) option++;}
-
-    if(symbol == 13)
-        {system("cls");
-        if(option == players_count) break;
-
-        printf("===================================================================== %s =====================================================================\n\n", players[option].name);
-        sprintf(message, "You are %s.", players[option].role.name);
-        typewriter_print(message);
-        printf("\n");
-        Sleep(1000);
-
-        sprintf(description, "%s", players[option].role.description);
-        typewriter_print(description);
-        printf("\n");
-        Sleep(500);
-
-        typewriter_print("When you are ready, type a random button to return to the menu!");
-        symbol = getch();}}}
-
 
 void start_the_night()
 {system("cls");
@@ -154,7 +41,7 @@ return suggestion;}
 
 
 void wake_thief(Player *players, int players_count, Role *middle_cards)
-{int i, thief_index;
+{int thief_index;
 char message[MAX_MESSAGE];
 Bool there_is_thief = YES;
 
@@ -173,6 +60,7 @@ if(there_is_thief)
     {char *names[] = {middle_cards[0].name, middle_cards[1].name, middle_cards[2].name};
     char *suggestion_text = narrate_role_suggestion(middle_cards);
     int choosen_index = menu(names, 3, suggestion_text);
+    free(suggestion_text);
 
     thief_index = change_with_chosen_middle_card(players, players_count, middle_cards, KRADEC, choosen_index);
 
@@ -196,7 +84,7 @@ speak_and_print("Close your eyes and go to sleep.");}
 
 
 void wake_double_agent(Player *players, int players_count, Role *middle_cards)
-{int i, double_agent_index;
+{int double_agent_index;
 char message[MAX_MESSAGE];
 Bool there_is_double_agent = YES;
 
@@ -217,6 +105,7 @@ if(there_is_double_agent)
     {char *names[] = {"Card 1", "Card 2"};
     char *suggestion_text = narrate_role_suggestion(middle_cards);
     int choosen_index = menu(names, 2, suggestion_text);
+    free(suggestion_text);
 
     double_agent_index = change_with_chosen_middle_card(players, players_count, middle_cards, DVOEN_AGENT, choosen_index);
 

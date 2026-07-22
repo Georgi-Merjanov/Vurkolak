@@ -6,6 +6,12 @@
 #define MAX_DESCRIPTION 600
 #define MAX_FILENAME 20
 
+#define change_roles(a, b) do\
+    {Role temp = (a); \
+    (a) = (b); \
+    (b) = temp;} \
+while(0)
+
 extern char filename[MAX_FILENAME];
 
 typedef enum {

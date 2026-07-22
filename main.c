@@ -29,7 +29,7 @@ printf("\n");
 
 /*
 for(i=0; i<players_count; i++)
-    {typewriter_print("Type the name of the %d-th player: ",i+1);
+    {typewriter_print("Type the name of the %d-th player: ", i+1);
     fgets(players[i].name, MAX_NAME, stdin);
 
     if(p=strchr(players[i].name, '\n'))

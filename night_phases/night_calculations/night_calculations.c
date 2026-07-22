@@ -1,13 +1,11 @@
 #include <stdlib.h>
-#include "calculations.h"
-#include "../start_game/start_game.h"
-
+#include "night_calculations.h"
 
 void move_thief_to_end(Role *middle_cards)
 {int i;
 for(i=0; i<3; i++)
     {if(middle_cards[i].type == KRADEC)
-        {change_roles(&middle_cards[i], &middle_cards[2]);
+        {change_roles(middle_cards[i], middle_cards[2]);
         break;}}}
 
 
@@ -29,7 +27,7 @@ for(i=0; i<players_count; i++)
         break;}}
 
 if(player_index != -1)
-    {change_roles(&players[player_index].role, &middle_cards[choosen_index]);
+    {change_roles(players[player_index].role, middle_cards[choosen_index]);
     if(role_type == DVOEN_AGENT)
         players[player_index].is_double_agent = YES;}
 

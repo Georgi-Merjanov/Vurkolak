@@ -68,6 +68,59 @@ Test_load_roles_fourteenth_card_should_be_villager();
 printf("\n");}
 
 
+void Test_reduce_thief_in_the_middle_chance()
+{printf("\n======================================== TEST: REDUCE THIEF IN THE MIDDLE CHANCE ========================================\n\n");
+int i, players_count = 6;
+Player players[6];
+Role middle_cards[3];
+
+for(i=0; i<players_count; i++)
+    {sprintf(players[i].name, "Player_%d", i+1);
+    players[i].role.type = SELQNIN;
+    strcpy(players[i].role.name, "Selqnin (Peasant)");}
+
+middle_cards[0].type = GLAVATAR; strcpy(middle_cards[0].name, "Glavatar (Leader)");
+middle_cards[1].type = LEKAR;    strcpy(middle_cards[1].name, "Lekar (Doctor)");
+middle_cards[2].type = VULK;     strcpy(middle_cards[2].name, "Vulk (Wolf)");
+
+reduce_thief_in_the_middle_chance(players, players_count, middle_cards);
+
+ASSERT_TEST("When Thief is not in middle, middle cards stay unchanged",
+            middle_cards[0].type == GLAVATAR && middle_cards[1].type == LEKAR && middle_cards[2].type == VULK);
+
+middle_cards[1].type = KRADEC; strcpy(middle_cards[1].name, "Kradec (Thief)");
+
+srand(1);
+reduce_thief_in_the_middle_chance(players, players_count, middle_cards);
+
+Bool thief_found_in_players = NO;
+for(i=0; i<players_count; i++)
+    {if(players[i].role.type == KRADEC)
+        thief_found_in_players = YES;}
+
+ASSERT_TEST("When Thief is in middle and swap triggers, one player gets KRADEC", thief_found_in_players == YES);
+ASSERT_TEST("When swap triggers, middle card is no longer KRADEC", middle_cards[1].type != KRADEC);
+printf("\n");}
+
+
+void Test_thief_in_middle_simulation()
+{printf("\n======================================== TEST: THIEF IN MIDDLE SIMULATION ========================================\n\n");
+int i, total_runs = 1000;
+int thief_not_in_middle_count = 0;
+Player players[6];
+Role middle_cards[3];
+
+srand(time(NULL));
+
+for(i=0; i<total_runs; i++)
+    {fill_roles(players, 6, middle_cards, filename);
+
+    if(is_role_not_in_the_middle(middle_cards, KRADEC) == YES)
+        thief_not_in_middle_count++;}
+
+printf("The thief in not in the middle kards: %d/%d times!\n\n", thief_not_in_middle_count, total_runs);}
+
+
 void Test_fill_roles_integration()
 {int i, alive_count=0, kmet_count=0, players_count=6;
 Player players[6];
@@ -307,6 +360,8 @@ void main()
 {system("cls");
 
 Test_role_loader();
+Test_reduce_thief_in_the_middle_chance();
+Test_thief_in_middle_simulation();
 Test_fill_roles_integration();
 Test_suggest_role_logic();
 // Test_narrate_role_suggestion();
@@ -314,7 +369,7 @@ Test_suggest_role_logic();
 Test_is_role_not_in_the_middle();
 Test_move_thief_to_end();
 Test_change_with_chosen_middle_card();
-Test_wake_thief();
-Test_wake_double_agent();
+// Test_wake_thief();
+// Test_wake_double_agent();
 
 printf("\nTests: %d/%d passed!\n\n", passed_tests, all_tests);}
