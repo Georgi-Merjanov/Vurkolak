@@ -8,8 +8,8 @@
 #include "../../narrator_tools/narrator_tools.h"
 
 #define MAX_SUGGESTION 50
-#define MAX_MESSAGE (20 + MAX_NAME + MAX_ROLE_NAME + MAX_DESCRIPTION)
-#define MESSAGE_KILLED_PLAYERS 100
+#define MAX_LONG_MESSAGE (20 + MAX_NAME + MAX_ROLE_NAME + MAX_DESCRIPTION)
+#define MAX_SHORT_MESSAGE 100
 
 void start_the_night()
 {system("cls");
@@ -42,7 +42,7 @@ return suggestion;}
 
 void wake_thief(Player *players, int players_count, Role *middle_cards)
 {int thief_index;
-char message[MAX_MESSAGE];
+char message[MAX_LONG_MESSAGE];
 Bool there_is_thief = YES;
 
 Sleep(1000);
@@ -85,7 +85,7 @@ speak_and_print("Close your eyes and go to sleep.");}
 
 void wake_double_agent(Player *players, int players_count, Role *middle_cards)
 {int double_agent_index;
-char message[MAX_MESSAGE];
+char message[MAX_LONG_MESSAGE];
 Bool there_is_double_agent = YES;
 
 move_thief_to_end(middle_cards);
@@ -132,9 +132,58 @@ speak_and_print("Close your eyes and go to sleep.");}
 
 
 Wolves_choice wake_wolves(Player *players, int players_count)
-{
+{int i;
+Wolves_choice wolves_choice = {-1, -1};
+char message[MAX_SHORT_MESSAGE];
+Bool sleepless_is_alive = NO;
 
-}
+Sleep(1000);
+system("cls");
+printf("======================================================================== VULCI (WOLVES) ================================================================\n\n");
+
+if(players_count < 10)
+    speak_and_print("Wolves, wake up. Open your eyes.");
+
+else
+    speak_and_print("Wolves and Leader, wake up. Open your eyes.");
+
+printf("\n\n");
+Sleep(3000);
+
+speak_and_print("Choose your victim for tonight:");
+printf("\n\n");
+
+wolves_choice.victim_index = menu_alive_players(players, players_count, VULK);
+
+speak_and_print("You made your choice!");
+printf("\n");
+
+for(i=0; i<players_count; i++)
+    {if(players[i].role.type == BEZSUNNICA && players[i].is_alive == YES)
+        sleepless_is_alive = YES;}
+
+if(sleepless_is_alive)
+    {printf("------------------------------------------------------------------------------------------------------------------------------------\n\n");
+    speak_and_print("And who do you think is the Sleepless:");
+    printf("\n\n");
+
+    players[wolves_choice.victim_index].is_alive = NO;
+    wolves_choice.sleepless_index = menu_alive_players(players, players_count, VULK);
+    players[wolves_choice.victim_index].is_alive = YES;
+
+    if(players[wolves_choice.sleepless_index].role.type == BEZSUNNICA)
+        {sprintf(message, "Yes, %s is the Sleepless, she will die automaticly!", players[wolves_choice.sleepless_index].name);
+        typewriter_print(message);}
+
+    else
+        {sprintf(message, "No, %s is not the Sleepless!", players[wolves_choice.sleepless_index].name);
+        typewriter_print(message);}}
+
+printf("\n");
+
+speak_and_print("Close your eyes and go to sleep.");
+
+return wolves_choice;}
 
 
 void wake_seer(Player *players, int players_count)
@@ -156,7 +205,7 @@ int wake_killer(Player *players, int players_count)
 
 
 void say_killed_players(Player *players, Wolves_choice wolves_choice, int saved_by_doctors_index, int attacked_by_killer_index)
-{char message[MESSAGE_KILLED_PLAYERS];
+{char message[MAX_SHORT_MESSAGE];
 Night_deaths night_deaths = resolve_night_actions(players, wolves_choice, saved_by_doctors_index, attacked_by_killer_index);
 
 if(night_deaths.first == -1)

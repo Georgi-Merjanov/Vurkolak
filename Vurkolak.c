@@ -298,7 +298,7 @@ while(1)
                 {night_victims[night_count++]=chosen_index;
                 wolf_victim_index=chosen_index;}
 
-            printf("\n\nYou made your choise!\nVie napravihte svoq izbor!\n\n");
+            printf("\n\nYou made your choice!\nVie napravihte svoq izbor!\n\n");
 
             b=0;
             for(k=0;k<n;k++)
@@ -335,7 +335,7 @@ while(1)
                 if(chosen_index!=-1 && strcmp(players[chosen_index].role,"Bezsunnica")==0)
                     night_victims[night_count++]=chosen_index;
 
-                printf("\n\nYou made your choise!\nVie napravihte svoq izbor!\n\n");}
+                printf("\n\nYou made your choice!\nVie napravihte svoq izbor!\n\n");}
 
             printf("\n\nIf you are ready, type a random button to continue the game!\nAko ste gotovi natisnete sluchaen buton za da produlzi igrata!");
             getch();

@@ -261,6 +261,30 @@ ASSERT_TEST("is_role_not_in_the_middle for KRADEC when present at index 2", is_r
 printf("\n");}
 
 
+void Test_menu_alive_players()
+{printf("\n======================================== TEST: MENU ALIVE PLAYERS ========================================\n\n");
+int i, index;
+Player players[6];
+char *names[] = {"Gogo", "Emi", "Vasko", "Uli", "Toni", "Lara"};
+
+for(i=0; i<6; i++)
+    {players[i].is_alive = YES;
+    strcpy(players[i].name, names[i]);
+    players[i].role.type = SELQNIN;}
+
+players[1].is_alive = NO;
+players[3].role.type = VULK;
+
+index = menu_alive_players(players, 6, VULK);
+
+ASSERT_TEST("Choosen index should be between 0 and 5", index >= 0 && index <= 5);
+ASSERT_TEST("Choosen player must be alive", players[index].is_alive == YES);
+ASSERT_TEST("Choosen player role must not be exception type", players[index].role.type != VULK);
+
+printf("Choosen index: %d\n", index);
+printf("Choosen name: %s\n\n", players[index].name);}
+
+
 void Test_change_with_chosen_middle_card()
 {printf("\n======================================== TEST: EXECUTE ROLE SWAP ========================================\n\n");
 int i, swapped_index, players_count = 6;
@@ -354,6 +378,47 @@ players[4].role.type = SELQNIN;
 
 wake_double_agent(players, players_count, middle_cards);
 printf("\n");}
+
+
+void Test_wake_wolves()
+{printf("\n======================================== TEST: WAKE WOLVES ========================================\n\n");
+int i;
+Player players[6];
+Wolves_choice choice;
+char *names[] = {"Gogo", "Emi", "Vasko", "Uli", "Toni", "Lara"};
+
+for(i=0; i<6; i++)
+    {players[i].is_alive = YES;
+    strcpy(players[i].name, names[i]);
+    players[i].role.type = SELQNIN;}
+
+players[0].role.type = VULK;
+players[2].role.type = VULK;
+
+choice = wake_wolves(players, 6);
+printf("\n\n");
+
+ASSERT_TEST("Victim index should be between 0 and 5", choice.victim_index >= 0 && choice.victim_index < 6);
+ASSERT_TEST("Victim cannot be a wolf", players[choice.victim_index].role.type != VULK);
+ASSERT_TEST("Sleepless choice should be -1", choice.sleepless_index == -1);
+
+printf("Victim index: %d (%s)\n", choice.victim_index, players[choice.victim_index].name);
+printf("Sleepless guess index: %d\n\n", choice.sleepless_index);
+
+Sleep(5000);
+
+players[5].role.type = BEZSUNNICA;
+
+choice = wake_wolves(players, 6);
+printf("\n\n");
+
+ASSERT_TEST("Victim index should be between 0 and 5", choice.victim_index >= 0 && choice.victim_index < 6);
+ASSERT_TEST("Victim cannot be a wolf", players[choice.victim_index].role.type != VULK);
+ASSERT_TEST("Sleepless choice should be between 0 and 5", choice.sleepless_index >= 0 && choice.sleepless_index < 6);
+ASSERT_TEST("Sleepless choice cannot be the victim", choice.sleepless_index != choice.victim_index);
+
+printf("Victim index: %d (%s)\n", choice.victim_index, players[choice.victim_index].name);
+printf("Sleepless guess index: %d (%s)\n\n", choice.sleepless_index, players[choice.sleepless_index].name);}
 
 
 void Test_resolve_night_actions()
@@ -536,15 +601,20 @@ Test_reduce_thief_in_the_middle_chance();
 Test_thief_in_middle_simulation();
 Test_fill_roles_integration();
 Test_suggest_role_logic();
+
 // Test_say_role_suggestion();
 // Test_menu();
+// Test_menu_alive_players();
+
 Test_is_role_not_in_the_middle();
 Test_move_thief_to_end();
 Test_change_with_chosen_middle_card();
+
 // Test_wake_thief();
 // Test_wake_double_agent();
+ Test_wake_wolves();
 
 Test_resolve_night_actions();
-Test_say_killed_players();
+// Test_say_killed_players();
 
 printf("\nTests: %d/%d passed!\n\n", passed_tests, all_tests);}

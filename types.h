@@ -36,7 +36,8 @@ typedef enum {
     LEKAR,        // Лекар
     UBIEC,        // Убиец
     MAZOHIST,     // Мазохист
-    SELQNIN       // Селянин
+    SELQNIN,      // Селянин
+    INVALID       // Невалидна роля
 } Role_type;
 
 typedef struct {
