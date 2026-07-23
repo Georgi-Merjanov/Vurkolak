@@ -6,10 +6,10 @@
 
 #include "night_waking_up.h"
 #include "../../narrator_tools/narrator_tools.h"
-#include "../night_calculations/night_calculations.h"
 
 #define MAX_SUGGESTION 50
 #define MAX_MESSAGE (20 + MAX_NAME + MAX_ROLE_NAME + MAX_DESCRIPTION)
+#define MESSAGE_KILLED_PLAYERS 100
 
 void start_the_night()
 {system("cls");
@@ -18,7 +18,7 @@ printf("\n\nType a random button when you are already asleep!\n");
 getch();}
 
 
-char * narrate_role_suggestion(Role *middle_cards)
+char * say_role_suggestion(Role *middle_cards)
 {int i, suggested_index = suggest_role(middle_cards);
 Bool is_double_agent = NO;
 
@@ -58,7 +58,7 @@ there_is_thief = is_role_not_in_the_middle(middle_cards, KRADEC);
 
 if(there_is_thief)
     {char *names[] = {middle_cards[0].name, middle_cards[1].name, middle_cards[2].name};
-    char *suggestion_text = narrate_role_suggestion(middle_cards);
+    char *suggestion_text = say_role_suggestion(middle_cards);
     int choosen_index = menu(names, 3, suggestion_text);
     free(suggestion_text);
 
@@ -103,7 +103,7 @@ there_is_double_agent = is_role_not_in_the_middle(middle_cards, DVOEN_AGENT);
 
 if(there_is_double_agent)
     {char *names[] = {"Card 1", "Card 2"};
-    char *suggestion_text = narrate_role_suggestion(middle_cards);
+    char *suggestion_text = say_role_suggestion(middle_cards);
     int choosen_index = menu(names, 2, suggestion_text);
     free(suggestion_text);
 
@@ -129,3 +129,43 @@ else
 
 printf("\n");
 speak_and_print("Close your eyes and go to sleep.");}
+
+
+Wolves_choice wake_wolves(Player *players, int players_count)
+{
+
+}
+
+
+void wake_seer(Player *players, int players_count)
+{
+
+}
+
+
+int wake_doctors(Player *players, int players_count, int last_night_saved_index)
+{
+
+}
+
+
+int wake_killer(Player *players, int players_count)
+{
+
+}
+
+
+void say_killed_players(Player *players, Wolves_choice wolves_choice, int saved_by_doctors_index, int attacked_by_killer_index)
+{char message[MESSAGE_KILLED_PLAYERS];
+Night_deaths night_deaths = resolve_night_actions(players, wolves_choice, saved_by_doctors_index, attacked_by_killer_index);
+
+if(night_deaths.first == -1)
+    speak_and_print("During this night no one died!");
+
+else
+    {if(night_deaths.second == -1)
+        {sprintf(message, "During this night died %s.", players[night_deaths.first].name);
+        speak_and_print(message);}
+    else
+        {sprintf(message, "During this night died %s and %s.", players[night_deaths.first].name, players[night_deaths.second].name);
+        speak_and_print(message);}}}

@@ -2,11 +2,15 @@
 #define NIGHT_CALCULATIONS_H
 
 #include "../../types.h"
-#include "../night_waking_up/night_waking_up.h"
 
 typedef struct {
-    int first;    // индекс на първия умрял (ако няма -1)
-    int second;   // индекс на втория умрял (ако няма -1)
+    int victim_index;       // индекс на убития
+    int sleepless_index;    // индекс на познатата Безсънница (ако не е позната -1)
+} Wolves_choice;
+
+typedef struct {
+    int first;     // индекс на първия умрял (ако няма -1)
+    int second;    // индекс на втория умрял (ако няма -1)
 } Night_deaths;
 
 void move_thief_to_end(Role *middle_cards);

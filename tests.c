@@ -199,7 +199,7 @@ strcpy(test_cards[0].name, "Selqnin (Peasant)");
 strcpy(test_cards[1].name, "Glavatar (Leader)");
 strcpy(test_cards[2].name, "Lekar (Doctor)");
 
-suggestion = narrate_role_suggestion(test_cards);
+suggestion = say_role_suggestion(test_cards);
 typewriter_print(suggestion);
 
 printf("--------------------------------------------------------------------\n");
@@ -212,7 +212,7 @@ strcpy(test_cards[0].name, "Selqnin (Peasant)");
 strcpy(test_cards[1].name, "Mazohist (Masochist)");
 strcpy(test_cards[2].name, "Kradec (Thief)");
 
-suggestion = narrate_role_suggestion(test_cards);
+suggestion = say_role_suggestion(test_cards);
 typewriter_print(suggestion);
 printf("\n");}
 
@@ -496,6 +496,38 @@ ASSERT_TEST("Scenario 3.2: Sleepless player 1 is dead", players[1].is_alive == N
 printf("\n");}
 
 
+void Test_say_killed_players()
+{printf("======================================== TEST: SAY KILLED PLAYERS ========================================\n\n");
+int i;
+Player players[6];
+Wolves_choice wolves_choice;
+
+for(i=0; i<6; i++)
+    {players[i].is_alive = YES;
+    sprintf(players[i].name, "Player%d", i);}
+
+for(i=0; i<6; i++) players[i].is_alive = YES;
+wolves_choice.victim_index = 0;
+wolves_choice.sleepless_index = -1;
+say_killed_players(players, wolves_choice, 0, -1);
+Sleep(1000);
+printf("\n");
+
+for(i=0; i<6; i++) players[i].is_alive = YES;
+wolves_choice.victim_index = 0;
+wolves_choice.sleepless_index = -1;
+say_killed_players(players, wolves_choice, 1, 3);
+Sleep(1000);
+printf("\n");
+
+for(i=0; i<6; i++) players[i].is_alive = YES;
+wolves_choice.victim_index = 0;
+wolves_choice.sleepless_index = 1;
+say_killed_players(players, wolves_choice, 0, 2);
+Sleep(1000);
+printf("\n");}
+
+
 void main()
 {system("cls");
 
@@ -504,7 +536,7 @@ Test_reduce_thief_in_the_middle_chance();
 Test_thief_in_middle_simulation();
 Test_fill_roles_integration();
 Test_suggest_role_logic();
-// Test_narrate_role_suggestion();
+// Test_say_role_suggestion();
 // Test_menu();
 Test_is_role_not_in_the_middle();
 Test_move_thief_to_end();
@@ -513,5 +545,6 @@ Test_change_with_chosen_middle_card();
 // Test_wake_double_agent();
 
 Test_resolve_night_actions();
+Test_say_killed_players();
 
 printf("\nTests: %d/%d passed!\n\n", passed_tests, all_tests);}
