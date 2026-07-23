@@ -356,6 +356,146 @@ wake_double_agent(players, players_count, middle_cards);
 printf("\n");}
 
 
+void Test_resolve_night_actions()
+{printf("======================================== TEST: RESOLVE NIGHT ACTIONS ========================================\n\n");
+int i;
+Player players[6];
+Wolves_choice wolves_choice;
+Night_deaths deaths;
+
+for(i=0; i<6; i++)
+    players[i].is_alive = YES;
+
+wolves_choice.victim_index = 0;
+wolves_choice.sleepless_index = -1;
+
+deaths = resolve_night_actions(players, wolves_choice, 0, -1);
+
+ASSERT_TEST("Scenario 1.1: First dead should be -1", deaths.first == -1);
+ASSERT_TEST("Scenario 1.1: Second dead should be -1", deaths.second == -1);
+ASSERT_TEST("Scenario 1.1: Victim player 0 remains alive", players[0].is_alive == YES);
+printf("\n");
+
+
+for(i=0; i<6; i++)
+    players[i].is_alive = YES;
+
+wolves_choice.victim_index = 0;
+wolves_choice.sleepless_index = -1;
+
+deaths = resolve_night_actions(players, wolves_choice, 0, 2);
+
+ASSERT_TEST("Scenario 2.1: First dead is Killer target (2)", deaths.first == 2);
+ASSERT_TEST("Scenario 2.1: Second dead is -1", deaths.second == -1);
+ASSERT_TEST("Scenario 2.1: Player 2 is dead", players[2].is_alive == NO);
+ASSERT_TEST("Scenario 2.1: Victim player 0 remains alive", players[0].is_alive == YES);
+printf("\n");
+
+
+for(i=0; i<6; i++)
+    players[i].is_alive = YES;
+
+wolves_choice.victim_index = 0;
+wolves_choice.sleepless_index = -1;
+
+deaths = resolve_night_actions(players, wolves_choice, 1, 3);
+
+ASSERT_TEST("Scenario 2.2: First dead is Wolf victim (0)", deaths.first == 0);
+ASSERT_TEST("Scenario 2.2: Second dead is -1", deaths.second == -1);
+ASSERT_TEST("Scenario 2.2: Player 0 is dead", players[0].is_alive == NO);
+ASSERT_TEST("Scenario 2.2: Killer target 3 remains alive", players[3].is_alive == YES);
+printf("\n");
+
+
+for(i=0; i<6; i++)
+    players[i].is_alive = YES;
+
+wolves_choice.victim_index = 0;
+wolves_choice.sleepless_index = 1;
+
+deaths = resolve_night_actions(players, wolves_choice, 0, 1);
+
+ASSERT_TEST("Scenario 2.3: First dead is Sleepless (1)", deaths.first == 1);
+ASSERT_TEST("Scenario 2.3: Second dead is -1", deaths.second == -1);
+ASSERT_TEST("Scenario 2.3: Sleepless player 1 is dead", players[1].is_alive == NO);
+ASSERT_TEST("Scenario 2.3: Victim player 0 remains alive", players[0].is_alive == YES);
+printf("\n");
+
+
+for(i=0; i<6; i++)
+    players[i].is_alive = YES;
+
+wolves_choice.victim_index = 0;
+wolves_choice.sleepless_index = 1;
+
+deaths = resolve_night_actions(players, wolves_choice, 0, -1);
+
+ASSERT_TEST("Scenario 2.4: First dead is Sleepless (1)", deaths.first == 1);
+ASSERT_TEST("Scenario 2.4: Second dead is -1", deaths.second == -1);
+ASSERT_TEST("Scenario 2.4: Sleepless player 1 is dead", players[1].is_alive == NO);
+printf("\n");
+
+
+for(i=0; i<6; i++)
+    players[i].is_alive = YES;
+
+wolves_choice.victim_index = 0;
+wolves_choice.sleepless_index = 1;
+
+deaths = resolve_night_actions(players, wolves_choice, 1, 2);
+
+ASSERT_TEST("Scenario 2.5: First dead is Wolf victim (0)", deaths.first == 0);
+ASSERT_TEST("Scenario 2.5: Second dead is -1", deaths.second == -1);
+ASSERT_TEST("Scenario 2.5: Victim player 0 is dead", players[0].is_alive == NO);
+ASSERT_TEST("Scenario 2.5: Saved Sleepless player 1 remains alive", players[1].is_alive == YES);
+printf("\n");
+
+
+for(i=0; i<6; i++)
+    players[i].is_alive = YES;
+
+wolves_choice.victim_index = 0;
+wolves_choice.sleepless_index = 1;
+
+deaths = resolve_night_actions(players, wolves_choice, 0, 2);
+
+ASSERT_TEST("Scenario 3.1 (Z != X): First dead is Killer target (2)", deaths.first == 2);
+ASSERT_TEST("Scenario 3.1 (Z != X): Second dead is Sleepless (1)", deaths.second == 1);
+ASSERT_TEST("Scenario 3.1 (Z != X): Player 2 is dead", players[2].is_alive == NO);
+ASSERT_TEST("Scenario 3.1 (Z != X): Sleepless player 1 is dead", players[1].is_alive == NO);
+printf("\n");
+
+
+for(i=0; i<6; i++)
+    players[i].is_alive = YES;
+
+wolves_choice.victim_index = 0;
+wolves_choice.sleepless_index = 1;
+
+deaths = resolve_night_actions(players, wolves_choice, 0, 0);
+
+ASSERT_TEST("Scenario 3.1 (Z == X): First dead is Killer target X (0)", deaths.first == 0);
+ASSERT_TEST("Scenario 3.1 (Z == X): Second dead is Sleepless (1)", deaths.second == 1);
+ASSERT_TEST("Scenario 3.1 (Z == X): Player 0 is dead", players[0].is_alive == NO);
+ASSERT_TEST("Scenario 3.1 (Z == X): Sleepless player 1 is dead", players[1].is_alive == NO);
+printf("\n");
+
+
+for(i=0; i<6; i++)
+    players[i].is_alive = YES;
+
+wolves_choice.victim_index = 0;
+wolves_choice.sleepless_index = 1;
+
+deaths = resolve_night_actions(players, wolves_choice, 3, 2);
+
+ASSERT_TEST("Scenario 3.2: First dead is Wolf victim (0)", deaths.first == 0);
+ASSERT_TEST("Scenario 3.2: Second dead is Sleepless (1)", deaths.second == 1);
+ASSERT_TEST("Scenario 3.2: Victim player 0 is dead", players[0].is_alive == NO);
+ASSERT_TEST("Scenario 3.2: Sleepless player 1 is dead", players[1].is_alive == NO);
+printf("\n");}
+
+
 void main()
 {system("cls");
 
@@ -371,5 +511,7 @@ Test_move_thief_to_end();
 Test_change_with_chosen_middle_card();
 // Test_wake_thief();
 // Test_wake_double_agent();
+
+Test_resolve_night_actions();
 
 printf("\nTests: %d/%d passed!\n\n", passed_tests, all_tests);}
